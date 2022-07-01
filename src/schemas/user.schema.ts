@@ -8,7 +8,7 @@ export default {
       .required()
       .transform((pwd: string) => hashSync(pwd, 10)),
     name: yup.string().nullable(),
-    balance: yup.number().min(100).default(100),
+    balance: yup.number().min(0).default(0),
   }),
   serialization: yup.object().shape({
     username: yup.string().required(),

@@ -1,5 +1,6 @@
 import { Request } from 'express'
 import { sign } from 'jsonwebtoken'
+import { Decimal } from 'decimal.js'
 import { Balance, User } from '../entities'
 import { AppError } from '../errors/errors'
 import { BalanceRepository, UserRepository } from '../repositories'
@@ -28,7 +29,9 @@ class UserService {
     const savedUser = await UserRepository.save({ ...(userInfo as User) })
     const { user, balance } = await BalanceRepository.save({
       user: savedUser,
-      balance: balanceValue,
+      balance: Number(
+        Decimal.add(balanceValue, 100).toDecimalPlaces(2, Decimal.ROUND_DOWN)
+      ),
     } as Balance)
     const serializedUser = await userSchema.serialization.validate(
       { ...user, balance },
