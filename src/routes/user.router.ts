@@ -1,6 +1,10 @@
 import { Router } from 'express'
 import userController from '../controllers/user.controller'
-import { checkForConflicts, validateSchema } from '../middlewares'
+import {
+  checkForConflicts,
+  validateSchema,
+  validateToken,
+} from '../middlewares'
 import { userSchema } from '../schemas'
 
 const userRouter = Router()
@@ -13,6 +17,6 @@ userRouter.post(
   checkForConflicts,
   userController.register
 )
-userRouter.get('/user/:username', userController.getById)
+userRouter.get('/user/', validateToken, userController.getById)
 
 export default userRouter

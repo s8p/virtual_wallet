@@ -5,6 +5,8 @@ declare global {
   namespace Express {
     interface Request {
       validated: User | IUserCreation
+      user: User
+      authenticatedUser: User
     }
   }
 }

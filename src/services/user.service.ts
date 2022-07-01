@@ -39,13 +39,19 @@ class UserService {
     )
     return serializedUser
   }
-  getById = async ({ params }: Request) => {
-    const { username } = params
-    const user: User = await UserRepository.getBy({ username })
-    if (!user) {
-      throw new AppError(404, `User ´${username}´ not found`)
-    }
-    return user
+  getById = async ({ authenticatedUser }: Request) => {
+    const { username } = authenticatedUser
+    const { balance } = await BalanceRepository.getBy({
+      userUsername: username,
+    })
+    const serializedUser = await userSchema.serialization.validate(
+      { ...authenticatedUser, balance },
+      {
+        stripUnknown: true,
+        abortEarly: false,
+      }
+    )
+    return serializedUser
   }
 }
 export default new UserService()
