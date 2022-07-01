@@ -3,7 +3,7 @@ import AppDataSource from '../data-source'
 import { Balance } from '../entities'
 
 interface IBalanceRepo {
-  save: (user: Partial<Balance>) => Promise<Balance>
+  save: (balance: Balance) => Promise<Balance>
   getBy: (payload: object) => Promise<Balance>
   update: (id: string, payload: Partial<Balance>) => Promise<UpdateResult>
 }
@@ -15,8 +15,8 @@ class BalanceRepository implements IBalanceRepo {
     this.balanceRepo = AppDataSource.getRepository(Balance)
   }
 
-  save = async (user: Balance): Promise<Balance> =>
-    await this.balanceRepo.save(user)
+  save = async (balance: Balance): Promise<Balance> =>
+    await this.balanceRepo.save(balance)
 
   getBy = async (payload: object): Promise<Balance> =>
     await this.balanceRepo.findOneBy({ ...payload })

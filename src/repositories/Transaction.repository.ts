@@ -15,8 +15,8 @@ class TransactionRepository implements ITransactionRepo {
     this.transactionRepo = AppDataSource.getRepository(Transaction)
   }
 
-  save = async (user: Transaction): Promise<Transaction> =>
-    await this.transactionRepo.save(user)
+  save = async (transaction: Transaction): Promise<Transaction> =>
+    await this.transactionRepo.save(transaction)
 
   getBy = async (payload: object): Promise<Transaction> =>
     await this.transactionRepo.findOneBy({ ...payload })
