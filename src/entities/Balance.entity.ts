@@ -1,9 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm'
+import { User } from './User.entity'
 
 @Entity('balances')
 export class Balance {
-  @PrimaryGeneratedColumn('uuid')
-  id: string
+  @PrimaryColumn()
+  userUsername: string
+
+  @OneToOne(() => User, { cascade: true })
+  @JoinColumn()
+  user: User
+
   @Column({ type: 'float8' })
   balance: number
 }
