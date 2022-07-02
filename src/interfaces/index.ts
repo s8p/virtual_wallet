@@ -10,3 +10,7 @@ export interface IUserOutput {
   username: string
   balance: number
 }
+
+export interface IDeposit {
+  value: number
+}

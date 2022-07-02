@@ -1,10 +1,10 @@
 import { User } from '../entities'
-import { IUserCreation } from '../interfaces'
+import { IDeposit, IUserCreation } from '../interfaces'
 
 declare global {
   namespace Express {
     interface Request {
-      validated: User | IUserCreation
+      validated: User | IUserCreation | IDeposit
       user: User
       authenticatedUser: User
     }

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import dotenv from 'dotenv'
-import { JsonWebTokenError, verify } from 'jsonwebtoken'
+import { verify } from 'jsonwebtoken'
 import { AppError } from '../errors/errors'
 import { User } from '../entities'
 import { UserRepository } from '../repositories'
