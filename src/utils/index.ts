@@ -8,3 +8,8 @@ export const normalizeFloat = (
     .toDecimalPlaces(decimalPlace, Decimal.ROUND_DOWN)
     .toNumber()
 }
+export const addFloat = (base: number, addition: number): number => {
+  return Decimal.add(base, addition)
+    .toDecimalPlaces(2, Decimal.ROUND_DOWN)
+    .toNumber()
+}

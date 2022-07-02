@@ -1,11 +1,10 @@
-import Decimal from 'decimal.js'
 import { Request } from 'express'
 import { Balance } from '../entities'
 import { AppError } from '../errors/errors'
 import { IDeposit } from '../interfaces'
 import { BalanceRepository, TransactionRepository } from '../repositories'
 import { transferSchema } from '../schemas'
-import { normalizeFloat } from '../utils'
+import { addFloat, normalizeFloat } from '../utils'
 
 class TransferService {
   transfer = async ({ authenticatedUser, user, validated }: Request) => {
@@ -21,18 +20,14 @@ class TransferService {
     if (originBalance.balance < (validated as IDeposit).value) {
       throw new AppError(422, 'Insufficient founds')
     }
-    originBalance.balance = Decimal.sub(
-      originBalance.balance,
-      (validated as IDeposit).value
+    originBalance.balance = addFloat(
+      -(validated as IDeposit).value,
+      originBalance.balance
     )
-      .toDecimalPlaces(2, Decimal.ROUND_DOWN)
-      .toNumber()
-    recipientBalance.balance = Decimal.add(
+    recipientBalance.balance = addFloat(
       recipientBalance.balance,
       (validated as IDeposit).value
     )
-      .toDecimalPlaces(2, Decimal.ROUND_DOWN)
-      .toNumber()
     await BalanceRepository.save(originBalance)
     await BalanceRepository.save(recipientBalance)
     const transaction = TransactionRepository.save({
@@ -49,11 +44,9 @@ class TransferService {
     const balanceToUpdate: Balance = await BalanceRepository.getBy({
       userUsername: authenticatedUser.username,
     })
-    balanceToUpdate.balance = normalizeFloat(
-      Decimal.add(
-        (validated as IDeposit).value,
-        balanceToUpdate.balance
-      ).toNumber()
+    balanceToUpdate.balance = addFloat(
+      (validated as IDeposit).value,
+      balanceToUpdate.balance
     )
     if (balanceToUpdate.balance < 0) {
       throw new AppError(422, 'Insufficient founds')
