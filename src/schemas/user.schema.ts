@@ -10,6 +10,10 @@ export default {
     name: yup.string().nullable(),
     balance: yup.number().min(0).default(0),
   }),
+  login: yup.object().shape({
+    username: yup.string().required(),
+    password: yup.string().required(),
+  }),
   serialization: yup.object().shape({
     username: yup.string().required(),
     name: yup.string().nullable(),

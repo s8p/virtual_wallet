@@ -9,15 +9,18 @@ import { userSchema } from '../schemas'
 
 const userRouter = Router()
 
-userRouter.post('/login', userController.login)
-
+userRouter.post(
+  '/login',
+  validateSchema(userSchema.login),
+  userController.login
+)
 userRouter.post(
   '/register',
   validateSchema(userSchema.registration),
   checkForConflicts,
   userController.register
 )
-userRouter.get('/user/', validateToken, userController.getById)
+userRouter.get('/user', validateToken, userController.getById)
 userRouter.post(
   '/deposit',
   validateToken,
