@@ -4,7 +4,7 @@ import { AppError } from '../errors/errors'
 import { UserRepository } from '../repositories'
 
 const getUserOr404 = async (req: Request, _: Response, next: NextFunction) => {
-  const { username } = req.params
+  const { username } = req.body
   const user: User = await UserRepository.getBy({ username })
   if (!user) {
     throw new AppError(404, `User ´${username}´ not found`)

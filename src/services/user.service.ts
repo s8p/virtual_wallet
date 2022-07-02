@@ -3,10 +3,15 @@ import { sign } from 'jsonwebtoken'
 import { Decimal } from 'decimal.js'
 import { Balance, User } from '../entities'
 import { AppError } from '../errors/errors'
-import { BalanceRepository, UserRepository } from '../repositories'
+import {
+  BalanceRepository,
+  TransactionRepository,
+  UserRepository,
+} from '../repositories'
 import dotenv from 'dotenv'
 import { IDeposit, IUserCreation } from '../interfaces'
 import { userSchema } from '../schemas'
+import { normalizeFloat } from '../utils'
 dotenv.config()
 
 class UserService {
@@ -85,6 +90,37 @@ class UserService {
       }
     )
     return serializedUser
+  }
+  transfer = async ({ authenticatedUser, user, validated }: Request) => {
+    const originBalance = await BalanceRepository.getBy({
+      userUsername: authenticatedUser.username,
+    })
+    const recipientBalance = await BalanceRepository.getBy({
+      userUsername: user.username,
+    })
+    if (originBalance.balance < (validated as IDeposit).value) {
+      throw new AppError(422, 'Insufficient founds')
+    }
+    originBalance.balance = Decimal.sub(
+      originBalance.balance,
+      (validated as IDeposit).value
+    )
+      .toDecimalPlaces(2, Decimal.ROUND_DOWN)
+      .toNumber()
+    recipientBalance.balance = Decimal.add(
+      recipientBalance.balance,
+      (validated as IDeposit).value
+    )
+      .toDecimalPlaces(2, Decimal.ROUND_DOWN)
+      .toNumber()
+    await BalanceRepository.save(originBalance)
+    await BalanceRepository.save(recipientBalance)
+    const transaction = TransactionRepository.save({
+      usernameOrigin: authenticatedUser,
+      usernameRecipient: user,
+      transferedValue: (validated as IDeposit).value,
+    })
+    return transaction
   }
 }
 export default new UserService()

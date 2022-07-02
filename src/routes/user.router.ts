@@ -2,10 +2,11 @@ import { Router } from 'express'
 import userController from '../controllers/user.controller'
 import {
   checkForConflicts,
+  getUserOr404,
   validateSchema,
   validateToken,
 } from '../middlewares'
-import { userSchema } from '../schemas'
+import { transferSchema, userSchema } from '../schemas'
 
 const userRouter = Router()
 
@@ -32,6 +33,13 @@ userRouter.post(
   validateToken,
   validateSchema(userSchema.deposit),
   userController.update
+)
+userRouter.post(
+  '/transfer',
+  validateToken,
+  validateSchema(transferSchema.transaction),
+  getUserOr404,
+  userController.transfer
 )
 
 export default userRouter
