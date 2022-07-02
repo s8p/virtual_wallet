@@ -1,3 +1,3 @@
+import transferController from './transfer.controller'
 import userController from './user.controller'
-
-userController
+export { userController, transferController }

@@ -5,4 +5,8 @@ export default {
     username: yup.string().required(),
     value: yup.number().min(1).required(),
   }),
+  serialization: yup.object().shape({}),
+  transfer: yup.object().shape({
+    value: yup.number().required().min(0),
+  }),
 }

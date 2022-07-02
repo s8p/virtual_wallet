@@ -15,13 +15,5 @@ class UserController {
     const user = await userService.getById(req)
     return res.status(200).json(user)
   }
-  update = async (req: Request, res: Response) => {
-    const user = await userService.updateBalance(req)
-    return res.status(200).json(user)
-  }
-  transfer = async (req: Request, res: Response) => {
-    const user = await userService.transfer(req)
-    return res.status(200).json(user)
-  }
 }
 export default new UserController()
