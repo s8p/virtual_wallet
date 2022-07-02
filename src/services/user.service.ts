@@ -63,16 +63,20 @@ class UserService {
     const balanceToUpdate: Balance = await BalanceRepository.getBy({
       userUsername: authenticatedUser.username,
     })
-    balanceToUpdate.balance = Decimal.add(
-      (validated as IDeposit).value,
-      balanceToUpdate.balance
+    balanceToUpdate.balance = normalizeFloat(
+      Decimal.add(
+        (validated as IDeposit).value,
+        balanceToUpdate.balance
+      ).toNumber()
     )
-      .toDecimalPlaces(2, Decimal.ROUND_DOWN)
-      .toNumber()
     if (balanceToUpdate.balance < 0) {
       throw new AppError(422, 'Insufficient founds')
     }
     const { balance } = await BalanceRepository.save(balanceToUpdate)
+    await TransactionRepository.save({
+      usernameOrigin: authenticatedUser,
+      transferedValue: normalizeFloat((validated as IDeposit).value),
+    })
     const serializedUser = await userSchema.serialization.validate(
       { ...authenticatedUser, balance },
       {
