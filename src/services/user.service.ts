@@ -56,5 +56,31 @@ class UserService {
     )
     return serializedUser
   }
+  updateBalance = async ({ authenticatedUser, validated, path }: Request) => {
+    if (path === '/withdraw') {
+      ;(validated as IDeposit).value = -(validated as IDeposit).value
+    }
+    const balanceToUpdate: Balance = await BalanceRepository.getBy({
+      userUsername: authenticatedUser.username,
+    })
+    balanceToUpdate.balance = Decimal.add(
+      (validated as IDeposit).value,
+      balanceToUpdate.balance
+    )
+      .toDecimalPlaces(2, Decimal.ROUND_DOWN)
+      .toNumber()
+    if (balanceToUpdate.balance < 0) {
+      throw new AppError(422, 'Insufficient founds')
+    }
+    const { balance } = await BalanceRepository.save(balanceToUpdate)
+    const serializedUser = await userSchema.serialization.validate(
+      { ...authenticatedUser, balance },
+      {
+        stripUnknown: true,
+        abortEarly: false,
+      }
+    )
+    return serializedUser
+  }
 }
 export default new UserService()

@@ -15,4 +15,7 @@ export default {
     name: yup.string().nullable(),
     balance: yup.number().required(),
   }),
+  deposit: yup.object().shape({
+    value: yup.number().required().min(0),
+  }),
 }

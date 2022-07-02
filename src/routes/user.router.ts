@@ -18,5 +18,17 @@ userRouter.post(
   userController.register
 )
 userRouter.get('/user/', validateToken, userController.getById)
+userRouter.post(
+  '/deposit',
+  validateToken,
+  validateSchema(userSchema.deposit),
+  userController.update
+)
+userRouter.post(
+  '/withdraw',
+  validateToken,
+  validateSchema(userSchema.deposit),
+  userController.update
+)
 
 export default userRouter
