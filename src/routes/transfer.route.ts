@@ -5,6 +5,7 @@ import { transferSchema } from '../schemas'
 
 const transferRoute = Router()
 
+transferRoute.get('/history', validateToken, transferController.getHistory)
 transferRoute.post(
   '/deposit',
   validateToken,

@@ -10,6 +10,10 @@ class TransferController {
     const user = await transferService.transfer(req)
     return res.status(200).json(user)
   }
+  getHistory = async (req: Request, res: Response) => {
+    const user = await transferService.getAll(req)
+    return res.status(200).json(user)
+  }
 }
 
 export default new TransferController()

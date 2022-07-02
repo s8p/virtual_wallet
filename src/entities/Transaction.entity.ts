@@ -17,12 +17,12 @@ export class Transaction {
   date?: Date
 
   @ManyToOne(() => User, { eager: true })
-  @JoinColumn({ name: 'usernameOrigin' })
-  usernameOrigin: User
+  @JoinColumn({ name: 'userOrigin' })
+  userOrigin: User
 
   @ManyToOne(() => User, { eager: true })
-  @JoinColumn({ name: 'usernameRecipient' })
-  usernameRecipient?: User
+  @JoinColumn({ name: 'userRecipient' })
+  userRecipient?: User
 
   @Column({ type: 'float8' })
   transferedValue: number
