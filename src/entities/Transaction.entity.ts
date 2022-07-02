@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import { User } from './User.entity'
 
 @Entity('transactions')
 export class Transaction {
@@ -13,6 +16,14 @@ export class Transaction {
   @CreateDateColumn()
   date?: Date
 
+  @OneToOne(() => User, { eager: true })
+  @JoinColumn({ name: 'usernameOrigin' })
+  usernameOrigin: User
+
+  @OneToOne(() => User, { eager: true })
+  @JoinColumn({ name: 'usernameRecipient' })
+  usernameRecipient: User
+
   @Column({ type: 'float8' })
-  transfered_value: number
+  transferedValue: number
 }
