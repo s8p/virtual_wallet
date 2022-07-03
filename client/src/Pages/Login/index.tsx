@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useAuth } from '../../Context/AuthContext'
 import { Link, useHistory } from 'react-router-dom'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 
 interface LoginData {
   username: string
@@ -26,12 +27,38 @@ const Login = () => {
   }
   return (
     <>
-      <form onSubmit={handleSubmit(submit)}>
-        <input {...register('username')}></input>
-        <input {...register('password')}></input>
-        <button type='submit'>Entrar</button>
-      </form>
-      <Link to='/register'>cadastrar</Link>
+      <Box
+        sx={{
+          width: '100%',
+          position: 'absolute',
+          top: 86,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 1.5,
+        }}
+        component='form'
+        onSubmit={handleSubmit(submit)}
+      >
+        <Typography variant='h1'>Entrar</Typography>
+        <TextField
+          error={!!errors.username?.message}
+          helperText={errors.username?.message}
+          label='Nome de Usuario'
+          {...register('username')}
+        ></TextField>
+        <TextField
+          error={!!errors.password?.message}
+          helperText={errors.password?.message}
+          type='password'
+          label='Senha'
+          {...register('password')}
+        ></TextField>
+        <Button variant='outlined' type='submit'>
+          Entrar
+        </Button>
+        <Link to='/register'>Cadastrar</Link>
+      </Box>
     </>
   )
 }
