@@ -57,7 +57,9 @@ const Login = () => {
         <Button variant='outlined' type='submit'>
           Entrar
         </Button>
-        <Link to='/register'>Cadastrar</Link>
+        <Typography>
+          Ainda não possui uma conta? <Link to='/register'>Cadastrar</Link>
+        </Typography>
       </Box>
     </>
   )
