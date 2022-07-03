@@ -5,6 +5,8 @@ import {
   useContext,
   useState,
 } from 'react'
+import { useHistory } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import api from '../Services/api'
 
 interface AuthProviderProps {
@@ -31,7 +33,6 @@ interface AuthContextData {
   signIn: (credentials: SignInCredentials) => Promise<void>
   signOut: () => void
   getUserInfo: () => Promise<User>
-  getTransactions: () => Promise<any>
 }
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
@@ -52,33 +53,57 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
     return {} as AuthState
   })
+  const history = useHistory()
   const signUp = useCallback(
     async ({ name, username, password }: SignInCredentials) => {
-      const response = await api.post('/register', {
-        name,
-        username,
-        password,
-      })
-      const { token, user } = response.data
-      localStorage.setItem('@Wallet:Token', token)
-      localStorage.setItem('@Wallet:User', JSON.stringify(user))
-      setData({ accessToken: token, user })
+      api
+        .post('/register', {
+          name,
+          username,
+          password,
+        })
+        .then((response) => {
+          const { token, user } = response.data
+          localStorage.setItem('@Wallet:Token', token)
+          localStorage.setItem('@Wallet:User', JSON.stringify(user))
+          setData({ accessToken: token, user })
+        })
+        .catch((err) => {
+          const errorMessage =
+            err.response.status === 409
+              ? 'Nome de Usuario já cadastrado'
+              : 'Algo deu errado'
+          toast.error(errorMessage)
+        })
     },
     []
   )
   const signIn = useCallback(
     async ({ username, password }: SignInCredentials) => {
-      const response = await api.post('/login', { username, password })
-      const { token } = response.data
-      localStorage.setItem('@Wallet:Token', token)
-      const user = await getUserInfo()
-      localStorage.setItem('@Wallet:User', JSON.stringify(user))
-      setData({ accessToken: token, user })
+      api
+        .post('/login', { username, password })
+        .then(async (response) => {
+          const { token } = response.data
+          localStorage.setItem('@Wallet:Token', token)
+          const user = await getUserInfo()
+          localStorage.setItem('@Wallet:User', JSON.stringify(user))
+          setData({ accessToken: token, user })
+          history.push('/home')
+        })
+        .catch((err) => {
+          const errorMessage =
+            err.response.status === 401
+              ? 'Senha ou Nome de Usuario invalidos'
+              : 'Algo deu errado'
+          toast.error(errorMessage)
+        })
     },
     []
   )
   const signOut = useCallback(() => {
     localStorage.removeItem('@Wallet:Token')
+    localStorage.removeItem('@Wallet:User')
+    history.push('/login')
     setData({} as AuthState)
   }, [])
   const getUserInfo = useCallback(async () => {
@@ -90,14 +115,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const user: User = response.data
     return user
   }, [])
-  const getTransactions = useCallback(async () => {
-    const token = localStorage.getItem('@Wallet:Token')
-    if (!token) throw new Error('f')
-    const response = await api.get('/history', {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    return response.data
-  }, [])
   return (
     <AuthContext.Provider
       value={{
@@ -107,7 +124,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         signIn,
         signOut,
         getUserInfo,
-        getTransactions,
       }}
     >
       {children}
