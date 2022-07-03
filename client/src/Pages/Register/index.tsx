@@ -2,7 +2,8 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useAuth } from '../../Context/AuthContext'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { Box, Button, TextField, Typography } from '@mui/material'
 
 interface UserData {
   username: string
@@ -16,7 +17,6 @@ const registerSchema = yup.object().shape({
   name: yup.string().nullable(),
 })
 const Register = () => {
-  const history = useHistory()
   const { signUp } = useAuth()
   const {
     handleSubmit,
@@ -25,17 +25,50 @@ const Register = () => {
   } = useForm<UserData>({ resolver: yupResolver(registerSchema) })
 
   const submit = (data: UserData) => {
-    signUp(data).then(() => history.push('/home'))
+    signUp(data)
   }
   return (
     <>
-      <form onSubmit={handleSubmit(submit)}>
-        <input {...register('name')}></input>
-        <input {...register('username')}></input>
-        <input {...register('password')}></input>
-        <button type='submit'>Registrar</button>
-      </form>
-      <Link to='/login'>Entrar</Link>
+      <Box
+        component='form'
+        onSubmit={handleSubmit(submit)}
+        sx={{
+          width: '100%',
+          position: 'absolute',
+          top: 86,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 1.5,
+        }}
+      >
+        <Typography variant='h1'>Cadastrar</Typography>
+        <TextField
+          error={!!errors.name?.message}
+          helperText={errors.name?.message}
+          label='Nome'
+          {...register('name')}
+        ></TextField>
+        <TextField
+          error={!!errors.username?.message}
+          helperText={errors.username?.message}
+          label='Nome de Usuario *'
+          {...register('username')}
+        ></TextField>
+        <TextField
+          error={!!errors.password?.message}
+          helperText={errors.password?.message}
+          type='password'
+          label='Senha *'
+          {...register('password')}
+        ></TextField>
+        <Button variant='outlined' type='submit'>
+          Registrar
+        </Button>
+        <Typography>
+          Já possui uma conta? <Link to='/login'>Entrar</Link>
+        </Typography>
+      </Box>
     </>
   )
 }
