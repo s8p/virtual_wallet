@@ -5,10 +5,14 @@ export interface IUserCreation {
   balance: number
 }
 
-export interface IUserOutput {
+interface IUser {
   name?: string
   username: string
   balance: number
+}
+export interface IUserOutput {
+  user: IUser
+  token: string
 }
 
 export interface IDeposit {

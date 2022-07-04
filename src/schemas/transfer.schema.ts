@@ -8,7 +8,7 @@ export default {
   }),
   serialization: yup.object().shape({
     id: yup.number().required(),
-    date: yup.string().required(),
+    date: yup.date().required(),
     transferedValue: yup.number().required(),
     userOrigin: yup.object().shape({
       username: yup.string().required(),
@@ -18,7 +18,7 @@ export default {
   historySerialization: yup.array().of(
     yup.object().shape({
       id: yup.number().required(),
-      date: yup.string().required(),
+      date: yup.date().required(),
       transferedValue: yup.number().required(),
       userOrigin: yup.object().shape({
         username: yup.string().required(),

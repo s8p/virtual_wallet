@@ -3,15 +3,10 @@ import { sign } from 'jsonwebtoken'
 import { Decimal } from 'decimal.js'
 import { Balance, User } from '../entities'
 import { AppError } from '../errors/errors'
-import {
-  BalanceRepository,
-  TransactionRepository,
-  UserRepository,
-} from '../repositories'
+import { BalanceRepository, UserRepository } from '../repositories'
 import dotenv from 'dotenv'
-import { IDeposit, IUserCreation } from '../interfaces'
+import { IUserCreation } from '../interfaces'
 import { userSchema } from '../schemas'
-import { normalizeFloat } from '../utils'
 dotenv.config()
 
 class UserService {
@@ -45,7 +40,12 @@ class UserService {
         abortEarly: false,
       }
     )
-    return serializedUser
+    const token = sign(
+      { username: serializedUser.username },
+      process.env.SECRET_KEY,
+      { expiresIn: process.env.EXPIRES_IN }
+    )
+    return { user: serializedUser, token }
   }
   getById = async ({ authenticatedUser }: Request) => {
     const { username } = authenticatedUser
