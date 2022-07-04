@@ -4,7 +4,7 @@ import { verify } from 'jsonwebtoken'
 import { AppError } from '../errors/errors'
 import { User } from '../entities'
 import { UserRepository } from '../repositories'
-dotenv.config()
+dotenv.config({ path: '../../.env' })
 
 const validateToken = async (req: Request, _: Response, next: NextFunction) => {
   const token: string = req.headers.authorization?.split(' ')[1]

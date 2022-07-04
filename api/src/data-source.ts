@@ -3,7 +3,7 @@ import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import dotenv from 'dotenv'
 
-dotenv.config()
+dotenv.config({ path: '../../.env' })
 
 const ProdEnv = new DataSource({
   type: 'postgres',

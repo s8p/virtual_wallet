@@ -7,7 +7,7 @@ import { BalanceRepository, UserRepository } from '../repositories'
 import dotenv from 'dotenv'
 import { IUserCreation } from '../interfaces'
 import { userSchema } from '../schemas'
-dotenv.config()
+dotenv.config({ path: '../../.env' })
 
 class UserService {
   login = async ({ body }: Request) => {

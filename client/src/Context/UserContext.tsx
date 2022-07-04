@@ -88,6 +88,11 @@ const UserProvider = ({ children }: UserProviderProps) => {
         toast.success(`Transferência concluída com sucesso!`)
         getUserInfo(token)
       })
+      .catch(({ response }) => {
+        const errorMessage =
+          response.status === 404 ? 'Usuário não encontrado' : 'Algo deu errado'
+        toast.error(errorMessage)
+      })
   }
   const getTransactionHistory = async (token: string) => {
     const { data } = await api.get('/history', {

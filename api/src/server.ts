@@ -1,7 +1,7 @@
 import app from './app'
 import AppDataSource from './data-source'
 import dotenv from 'dotenv'
-dotenv.config()
+dotenv.config({ path: '../../.env' })
 
 AppDataSource.initialize()
   .then(() => {
