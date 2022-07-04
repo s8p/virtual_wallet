@@ -1,4 +1,4 @@
-import { Box, Button, Container, Typography } from '@mui/material'
+import { Paper, Box, Button, Container, Typography } from '@mui/material'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -18,9 +18,7 @@ const Home = () => {
     <Container>
       <Box
         sx={{
-          padding: 1,
-          border: 1,
-          borderColor: 'black',
+          paddingTop: 1,
           display: 'flex',
           justifyContent: 'space-around',
         }}
@@ -34,10 +32,16 @@ const Home = () => {
         </Button>
         <TransactionModal isOpen={isModalOpen} setIsOpen={handleModal} />
       </Box>
-      <Box>
-        <Typography marginTop={1}>
-          Olá {user.name || user.username}! {user.balance}
-        </Typography>
+      <Box
+        paddingTop={5}
+        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      >
+        <Typography variant='h3'>Olá, {user.name || user.username}!</Typography>
+        <Paper sx={{ padding: 5, marginTop: 5, maxWidth: '290px' }}>
+          <Typography align='center' variant='h4'>
+            R$ {user.balance}
+          </Typography>
+        </Paper>
       </Box>
     </Container>
   )
