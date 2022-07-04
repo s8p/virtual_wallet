@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useAuth } from '../../Context/AuthContext'
 import { useUser } from '../../Context/UserContext'
 
@@ -30,6 +30,7 @@ const History = () => {
   const { getTransactionHistory } = useUser()
   const { accessToken } = useAuth()
   const [transHist, setTransHist] = useState<Transfer[]>([] as Transfer[])
+  const history = useHistory()
 
   useEffect(() => {
     getHist()
@@ -42,10 +43,10 @@ const History = () => {
   const columns = ['ID', 'Data', 'Valor Transferido', 'De', 'Para']
   return (
     <Container>
-      <Typography variant='h1'>History</Typography>
-      <Button variant='contained' onClick={getHist}>
-        Get stuff
-      </Button>
+      <Typography marginTop={5} variant='h4'>
+        Historico de Transações
+      </Typography>
+      <Button onClick={() => history.push('/home')}>Voltar</Button>
       <TableContainer>
         <Table>
           <TableHead>
@@ -72,7 +73,6 @@ const History = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Link to='/home'>Voltar</Link>
     </Container>
   )
 }
