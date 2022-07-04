@@ -14,6 +14,9 @@ cp .env.example .env
 
 Edite o arquivo `.env` com os valores necessários
 
+- `DEFAULT_USER_NAME` Define o nome do usuário pré populado
+- `DEFAULT_USER_USERNAME` Define o username do usuário pré populado
+- `DEFAULT_USER_PASSWORD` Define a senha do usuário pré populado
 - `PORT` Define qual porta a API irá utilizar, utilize a porta `3000`
 - `DB_URI` Define a URI da database, por padrão sera utilizado o endereço do Docker
 - `POSTGRES_PASSWORD` Variável de ambiente necessária para o serviço do postgres no Docker
