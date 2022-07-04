@@ -1,12 +1,14 @@
-version: '3.3'
+version: '3.9'
 services:
   api:
     container_name: 'wallet-api'
+    env_file:
+      - .env
     build:
-      context: .
+      context: ./api
       dockerfile: Dockerfile
     volumes:
-      - ./src:/app/src
+      - ./api/src:/app/src
     expose:
       - ${PORT}
     ports:
@@ -24,13 +26,13 @@ services:
       - 5432
     ports:
       - 5432:5432
-  # client:
-  #   container_name: 'wallet-client'
-  #   build:
-  #     context: ./client/
-  #     dockerfile: Dockerfile
-  #   expose:
-  #     - 80
-  #   ports:
-  #     - 80:3000
-  #   command: yarn start
+  client:
+    container_name: 'wallet-client'
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    expose:
+      - 80
+    ports:
+      - 80:3000
+    command: yarn start
