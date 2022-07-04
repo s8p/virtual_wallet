@@ -47,6 +47,7 @@ const SelfTransferForm = ({ setIsOpen }: Props) => {
     >
       <TextField
         type='number'
+        inputProps={{ step: '0.01' }}
         label='Valor'
         variant='filled'
         error={!!errors.value?.message}
