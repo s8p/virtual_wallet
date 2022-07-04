@@ -27,12 +27,10 @@ interface SignInCredentials {
   password: string
 }
 interface AuthContextData {
-  user: User
   accessToken: string
   signUp: (userInfo: SignInCredentials) => Promise<void>
   signIn: (credentials: SignInCredentials) => Promise<void>
   signOut: () => void
-  getUserInfo: () => Promise<User>
 }
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
@@ -119,11 +117,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     <AuthContext.Provider
       value={{
         accessToken: data.accessToken,
-        user: data.user,
         signUp,
         signIn,
         signOut,
-        getUserInfo,
       }}
     >
       {children}

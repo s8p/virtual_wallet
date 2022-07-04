@@ -1,2 +1,4 @@
 import TransactionModal from './TransactionModal'
-export { TransactionModal }
+import SelfTransferForm from './SelfTransferForm'
+import TransferForm from './TransferForm'
+export { TransactionModal, SelfTransferForm, TransferForm }

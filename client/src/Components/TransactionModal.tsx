@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  InputLabel,
   MenuItem,
   Modal,
   Select,
@@ -8,6 +9,8 @@ import {
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
+import SelfTransferForm from './SelfTransferForm'
+import TransferForm from './TransferForm'
 
 interface Props {
   isOpen: boolean
@@ -20,28 +23,33 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  alignItems: 'strech',
+  gap: 2,
 }
 const TransactionModal = ({ isOpen, setIsOpen }: Props) => {
-  const [type, setType] = useState('deposit')
+  const [type, setType] = useState('self')
   return (
     <Modal open={isOpen} onClose={setIsOpen}>
       <Box sx={style}>
-        <Typography variant='h3'>Transferencia</Typography>
         <Select
+          variant='filled'
           value={type}
-          label='Tipo de Transferencia'
+          label='Tipo de Transferência'
           onChange={(e) => setType(e.target.value)}
         >
-          <MenuItem value='deposit'>Deposito</MenuItem>
-          <MenuItem value='withdraw'>Saque</MenuItem>
-          <MenuItem value='transfer'>Transferencia</MenuItem>
+          <MenuItem value='self'>Deposito / Saque</MenuItem>
+          <MenuItem value='transfer'>Transferência</MenuItem>
         </Select>
-        <TextField label='Para' variant='filled' />
-        <TextField type='number' label='Valor' variant='filled' />
-        <Button>Tranferir</Button>
+        {type === 'self' ? (
+          <SelfTransferForm setIsOpen={setIsOpen} />
+        ) : (
+          <TransferForm setIsOpen={setIsOpen} />
+        )}
       </Box>
     </Modal>
   )
