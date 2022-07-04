@@ -65,6 +65,11 @@ const UserProvider = ({ children }: UserProviderProps) => {
         toast.success(`Valor ${verb} com sucesso`)
         getUserInfo(token)
       })
+      .catch(({ response }) => {
+        const errorMessage =
+          response.status === 422 ? 'Saldo insuficiente' : 'Algo deu errado'
+        toast.error(errorMessage)
+      })
   }
   const makeTransfer = (
     value: number,
@@ -90,7 +95,11 @@ const UserProvider = ({ children }: UserProviderProps) => {
       })
       .catch(({ response }) => {
         const errorMessage =
-          response.status === 404 ? 'Usuário não encontrado' : 'Algo deu errado'
+          response.status === 404
+            ? 'Usuário não encontrado'
+            : response.status === 422
+            ? 'Saldo insuficiente'
+            : 'Algo deu errado'
         toast.error(errorMessage)
       })
   }

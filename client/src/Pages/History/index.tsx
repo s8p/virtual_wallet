@@ -44,7 +44,7 @@ const History = () => {
   return (
     <Container>
       <Typography marginTop={5} variant='h4'>
-        Historico de Transações
+        Histórico de Transações
       </Typography>
       <Button onClick={() => history.push('/home')}>Voltar</Button>
       <TableContainer>

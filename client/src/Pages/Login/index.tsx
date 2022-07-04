@@ -44,7 +44,7 @@ const Login = () => {
         <TextField
           error={!!errors.username?.message}
           helperText={errors.username?.message}
-          label='Nome de Usuario'
+          label='Nome de Usuário'
           {...register('username')}
         ></TextField>
         <TextField
